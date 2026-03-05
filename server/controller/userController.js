@@ -37,4 +37,39 @@ const signUpController = async(req, res) => {
     }
 }
 
-module.exports = signUpController;
+
+const signInController = async (req, res) => {
+    const username = req.headers.username;
+    const password = req.headers.password;
+
+    try {
+        const user = await User.findOne({ username });
+
+        if (!user) {
+            return res.status(404).json({
+                msg: "User not found. Please sign up first."
+            });
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+        if (isPasswordCorrect) {
+            const token = jwt.sign({ username: user.username }, JWT_KEY);
+
+            res.status(200).json({
+                msg: "SignIn Successful!",
+                token: token
+            });
+        } else {
+            res.status(401).json({
+                msg: "Invalid credentials."
+            });
+        }
+    } catch (e) {
+        res.status(500).json({
+            error: e.message
+        });
+    }
+}
+
+module.exports = {signUpController, signInController};
