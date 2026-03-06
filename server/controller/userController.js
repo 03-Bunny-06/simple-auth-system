@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const User = require("../models/userModel");
 const JWT_KEY = process.env.JWT_KEY;
 
+//SignUp Controller
 const signUpController = async(req, res) => {
     const username = req.headers.username;
     const password = req.headers.password;
@@ -37,7 +38,7 @@ const signUpController = async(req, res) => {
     }
 }
 
-
+//SignIn Controller
 const signInController = async (req, res) => {
     const username = req.headers.username;
     const password = req.headers.password;
